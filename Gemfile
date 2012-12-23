@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'spree', :path => '../spree'
+gem 'spree', '1.2.0'
 
 gemspec
 

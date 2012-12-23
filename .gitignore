@@ -3,5 +3,7 @@
 **/*.log
 *~
 .#*
+.project
+.rvmrc
 Gemfile.lock
 spec/dummy
