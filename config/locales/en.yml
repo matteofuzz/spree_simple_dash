@@ -20,3 +20,7 @@ en:
   this_year: "This Year"
   top_grossing_products: "Top Grossing Products"
   units: "Units"
+  of: of
+  last: last
+  count_on_hand: count on hand
+  updated_at: updated_at

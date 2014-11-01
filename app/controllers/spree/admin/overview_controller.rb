@@ -18,7 +18,9 @@ class Spree::Admin::OverviewController < Spree::Admin::BaseController
     @top_grossing_variants = top_grossing_variants
     @last_five_orders = last_five_orders
     @biggest_spenders = biggest_spenders
+    @out_of_stock_products_n = 10
     @out_of_stock_products = out_of_stock_products
+    @out_of_stock_products_all = out_of_stock_products_all
     @best_selling_taxons = best_selling_taxons
 
     @pie_colors = ['#0093DA', '#FF3500', '#92DB00', '#1AB3FF', '#FFB800']
@@ -93,7 +95,7 @@ class Spree::Admin::OverviewController < Spree::Admin::BaseController
     end
 
     def best_selling_variants
-      li = Spree::LineItem.includes(:order).where("#{Spree::Order.table_name}.state = 'complete'").order("SUM(#{Spree::LineItem.table_name}.quantity) DESC").group(:variant_id).limit(5).sum(:quantity)	
+      li = Spree::LineItem.includes(:order).where("#{Spree::Order.table_name}.state = 'complete'").order("SUM(#{Spree::LineItem.table_name}.quantity) DESC").group(:variant_id).limit(5).sum(:quantity)
       variants = li.map do |v|
         variant = Spree::Variant.find(v[0])
         [variant.name, v[1]]
@@ -144,6 +146,10 @@ class Spree::Admin::OverviewController < Spree::Admin::BaseController
     end
 
     def out_of_stock_products
-      Spree::Product.where(:count_on_hand => 0).limit(5)
+      Spree::Product.where("count_on_hand <= 0").reorder("updated_at ASC").limit(@out_of_stock_products_n)
+    end
+
+    def out_of_stock_products_all
+      Spree::Product.where("count_on_hand <= 0").reorder("updated_at ASC")
     end
 end
